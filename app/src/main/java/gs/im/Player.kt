@@ -46,10 +46,6 @@ class Player( _name: String, var healthPoints: Int = 100, val isBlessed: Boolean
         return auraColor
     }
 
-//    private fun castFireball(numFireballs: Int = 2) =
-//        println(" 한 덩어리의 파이어볼이 나타난다. (x$numFireballs)")
-
-
     fun formatHealthStatus() =
         when (healthPoints) {
             100 -> " 최상의 상태임!"

@@ -1,18 +1,7 @@
 package gs.im
 
-import android.Manifest.permission_group.LOCATION
-import android.app.Application
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
-import gs.im.MainActivity.Game.currentRoom
-import gs.im.MainActivity.Game.player
-import java.io.File
-import java.io.FileOutputStream
-import java.lang.Exception
-import java.lang.IllegalStateException
-import kotlin.math.roundToInt
-import gs.im.Player
+import androidx.appcompat.app.AppCompatActivity
 
 const val MAX_EXPERIENCE: Int = 5000
 const val TAVERN_NAME = "Evan's Folly"
@@ -36,12 +25,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         main()
-//        sandbox()
-//        tavern()
-//        placeOrder("shandy,Dragon's Breath,5.91")
-//        displayWallet()
-
-
+        sandbox()
+        tavern()
+        displayWallet()
 
     }
 
@@ -80,17 +66,10 @@ class MainActivity : AppCompatActivity() {
         patronGold[ patronName ] = totalPurse - price
     }
 
-//    private fun displayBalance(){
-//        println( "플레이어의 지갑 잔액: 금화: $playerGold 개, 은화: $playerSilver 개")
-//    }
-
     private fun displayPatronBalances(){
         for( it in patronGold ){
             println("${it.key}, blance: ${"%.2f".format(it.value)}")
         }
-//            patronGold.forEach { patron, balance ->
-//                println("$patron, blance: ${"%.2f".format(balance)}")
-//            }
     }
 
     private fun placeOrder( patronName: String, menuData: String ) {
@@ -99,15 +78,11 @@ class MainActivity : AppCompatActivity() {
         println( "$patronName 은 $tavernMaster 에게 주문한다." )
 
 
-        val data = menuData.split(',')
         val ( type, name, price ) = menuData.split( ',' )
         val message = "$patronName 은 금화 $price 로 $name ($type)를 구입한다. "
         println( message )
 
         performPurchase( price.toDoubleOrNull() ?: 0.0, patronName )
-
-//        val phrase = "와, $name 진짜 좋구나!"
-//        println("출력: 마드리갈이 감탄한다.: ${toDragonSpeak(phrase)}")
 
         val phrase = if( name == "Dragon's Breath"){
             "$patronName 이 감탄한다.: ${toDragonSpeak("와, $name 진짜 좋구나!")}"
@@ -154,21 +129,10 @@ class MainActivity : AppCompatActivity() {
 
 
     fun proficiencyCheck( swordsJuggling: Int? ){
-//        swordsJuggling ?: throw UnskilledSwordJugglerException()
         checkNotNull( swordsJuggling, {"플레이어가 저글링을 할수 없음"})
     }
 
-    class UnskilledSwordJugglerException() : IllegalStateException("플레이어가 저글링을 할수 없음")
-
-
     fun sandbox() {
-
-        var greetingFunction: (String, Int) -> String = { playerName, numBuildings ->
-            val currentYear = 2019
-            println("$numBuildings 채의 건물이 추가됨")
-            "SimVillage 방문을 환영합니다. $playerName 님! (copyright $currentYear)"
-        }
-
         runSimulation()
     }
 
@@ -197,26 +161,6 @@ class MainActivity : AppCompatActivity() {
 
         Game.play()
     }
-
-
-    fun performCombat() {
-        println("적군이 없다")
-    }
-
-    fun performCombat(enemy: String) {
-        println("$enemy 과 전투시작")
-    }
-
-    fun performCombat(enemy: String, isBlessed: Boolean) {
-        if (isBlessed) {
-            println("$enemy 과 전투시작 축복 있음")
-        } else {
-            println("$enemy 과 전투시작 축복 없음")
-        }
-    }
-
-
-
 
     object Game{
 
@@ -257,9 +201,11 @@ class MainActivity : AppCompatActivity() {
             val argument =  input.split(" ").getOrElse(1, {""})
 
             fun processCommand() = when( command.toLowerCase()){
+                "move"-> goDirecation()
                 else -> commandNotFound()
             }
 
+            private fun goDirecation() = "가자!"
             private fun commandNotFound() = "적합하지 않은 명령입니다."
 
         }
